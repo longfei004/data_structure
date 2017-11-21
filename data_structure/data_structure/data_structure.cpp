@@ -1,93 +1,198 @@
 #include <iostream>
 #include "linklist.h"
-
+#include "linkstack.h"
+#include "math.h"
+#include <string>
 using namespace std;
 
+typedef struct
+{
+	char m_chstr;
+	int m_ngrade;
+}STR;
+
+//判断是否为数字，共几位
+int isnum(string &exp,int k,int &l)
+{
+	string num = "09";
+
+	if (exp[k] >= num[0] && exp[k] <= num[1])
+	{
+		l++;
+		isnum(exp, k + 1, l);
+		return l;
+	}
+	else
+		return 0;
+}
+//运算符号转换
+STR str_tras(char str)
+{
+	STR v;
+	switch(str)
+	{
+		case '+':	
+		{
+			v.m_chstr = '+';
+			v.m_ngrade = 1;
+		}break;
+		case '-':
+		{
+			v.m_chstr = '-';
+			v.m_ngrade = 1;
+		}break;
+		case '*':
+		{
+			v.m_chstr = '*';
+			v.m_ngrade = 2;
+		}break;
+		case '/':
+		{
+			v.m_chstr = '/';
+			v.m_ngrade = 2;
+		}break;
+		case '(':
+		{
+			v.m_chstr = '(';
+			v.m_ngrade = 3;
+		}break;
+		case ')':
+		{
+			v.m_chstr = ')';
+			v.m_ngrade = 0;
+		}break;
+	}
+	return v;
+}
+// 实现后缀表达式生成与运算
 int main()
 {
-	char c = '*';
-	CLinkList<double> la;
-	double e;
-	int i;
+	//string expre = "9+(3-1)*3+10/2";  //待计算表达式
+	string expre;                      //待计算表达式
+	string post_expre;                //后缀表达式
+	int result = 0;                   //保存计算结果
+	CLinkStack<STR> cal_str;          //创建符号栈
+	CLinkStack<int> cal_num;          //创建数字栈
 
-	while (c != '0')
+	cin >> expre;
+	for (int i = 0; i < expre.size(); i++)
 	{
-		cout << endl << "1. 生成单链表.";
-		cout << endl << "2. 显示单链表.";
-		cout << endl << "3. 取指定位置的元素.";
-		cout << endl << "4. 设置元素值.";
-		cout << endl << "5. 删除元素.";
-		cout << endl << "6. 插入元素.";
-		cout << endl << "7. 元素定位";
-		cout << endl << "8. 取单链表长度";
-		cout << endl << "0. 退出";
-		cout << endl << "选择功能(0~8):";
-		cin >> c;
-		switch (c)
+		int l = 0;
+		isnum(expre, i,l);
+		if (l != 0)                   //判断是否为数字，共几位
 		{
-		case '1':
-			la.Clear();
-			cout << endl << "输入e(e = 0时退出):";
-			cin >> e;
-			while (e != 0) 
+			
+			while (l--)               
 			{
-				la.InsertElem(e);
-				cin >> e;
+				post_expre += expre[i];		
+				i++;
 			}
-			break;
-		case '2':
-			la.Traverse(Write<double>);
-			break;
-		case '3':
-			cout << endl << "输入元素位置:";
-			cin >> i;
-			if (la.GetElem(i, e) == RANGE_ERROR)
-				cout << "元素不存在." << endl;
+			post_expre += " ";
+			i--;
+		}
+		else
+		{
+			STR t;
+			t = str_tras(expre[i]);
+			if (cal_str.IsEmpty() && t.m_chstr != ')')     //如果为空栈，则入栈
+				cal_str.Push(t);
 			else
-				cout << "元素:" << e << endl;
-			break;
-		case '4':
-			cout << endl << "输入位置:";
-			cin >> i;
-			cout << endl << "输入元素值:";
-			cin >> e;
-			if (la.SetElem(i, e) == RANGE_ERROR)
-				cout << "位置范围错." << endl;
-			else
-				cout << "设置成功." << endl;
-			break;
-		case '5':
-			cout << endl << "输入位置:";
-			cin >> i;
-			if (la.DeleteElem(i, e) == RANGE_ERROR)
-				cout << "位置范围错." << endl;
-			else
-				cout << "被删除元素值:" << e << endl;
-			break;
-		case '6':
-			cout << endl << "输入位置:";
-			cin >> i;
-			cout << endl << "输入元素值:";
-			cin >> e;
-			if (la.InsertElem(i, e) == RANGE_ERROR)
-				cout << "位置范围错." << endl;
-			else
-				cout << "成功:" << e << endl;
-			break;
-		case '7':
-			cout << endl << "输入元素的值:";
-			cin >> e;
-			i = la.LocateElem(e);
-			if (i == 0)
-				cout << "元素不存在." << endl;
-			else
-				cout << "元素" << e << "的序号为：" << i << endl;
-			break;
-		case '8':
-			cout << endl << "单链表的长度为:" << la.GetLength() << endl;
-			break;
+			{
+				STR e;
+				cal_str.Top(e);
+				//如果优先级大于栈顶元素或者栈顶元素为左括号则入栈
+				if (t.m_ngrade > e.m_ngrade || e.m_chstr == '(')    
+					cal_str.Push(t);
+				else  //如果优先级小于等于栈顶元素则出栈栈内元素
+				{
+					if (t.m_chstr == ')')
+					{
+						while (e.m_chstr != '(')
+						{
+							cal_str.Pop(e);
+							if (e.m_chstr != '(')
+							{
+								post_expre += e.m_chstr;
+								post_expre += " ";
+							}
+						}
+					}
+					else
+					{
+						while (!cal_str.IsEmpty() && t.m_ngrade <= e.m_ngrade)
+						{
+							cal_str.Pop(e);
+							if (e.m_chstr != '(')
+							{
+								post_expre += e.m_chstr;
+								post_expre += " ";
+							}
+							cal_str.Top(e);
+						}
+						cal_str.Push(t);
+					}
+				}
+			}
 		}
 	}
-
+	while (!cal_str.IsEmpty())
+	{
+		STR e;
+		cal_str.Pop(e);
+		if (e.m_chstr != '(')
+		{
+			post_expre += e.m_chstr;
+			post_expre += " ";
+		}
+	}
+	cout << "The origin expression is:" << expre << endl;
+	cout << "The post expression is :" << post_expre << endl;
+	//根据后缀表达式计算结果
+	for (int i = 0; i < post_expre.size(); i++)
+	{
+		int l = 0; //暂存数字位数
+		int m = 0; //暂存当前位数字
+		string empty = " 0";
+		if (post_expre[i] != empty[0])    //若字符不为空格
+		{
+			isnum(post_expre, i, l);
+			if (l != 0)                   //若为L位数字
+			{
+				int num_temp = 0;         //暂存数字
+				while (l--)
+				{
+					m = post_expre[i] - empty[1];					
+					num_temp += (m * pow(10, l));
+					i++;
+				}
+				i--;
+				cal_num.Push(num_temp);    //数字入栈
+			}
+			else                           //若字符为符号
+			{
+				int a = 0,b = 0,c = 0;     //暂存待运算数字和运算结果
+				if (!cal_num.IsEmpty())
+				{
+					cal_num.Pop(a);        //出栈栈顶两元素
+					cal_num.Pop(b);
+				}
+				else
+					cout << "ERROR: The stack is Empty!" << endl;
+				switch (post_expre[i])
+				{
+					case '+':  c = b + a; break;
+					case '-':  c = b - a; break;
+					case '*':  c = b * a; break;
+					case '/':  c = b / a; break;
+				}
+				cal_num.Push(c);
+			}
+		}
+	}
+	cal_num.Pop(result);
+	if (!cal_num.IsEmpty())
+		cout << "ERROR: The result is wrong!" << endl;
+	else
+		cout << "The result is : " << result << endl;
 	return 0;
 }

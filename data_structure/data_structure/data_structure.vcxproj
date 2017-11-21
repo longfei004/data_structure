@@ -152,7 +152,9 @@
     <Text Include="named_rules.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Assistance.h" />
     <ClInclude Include="linklist.h" />
+    <ClInclude Include="linkstack.h" />
     <ClInclude Include="node.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -31,5 +31,11 @@
     <ClInclude Include="node.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="linkstack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Assistance.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,13 +3,9 @@
 
 #include <iostream>
 #include "node.h"
-#include <cassert>				
+#include <cassert>		
+#include "Assistance.h"
 
-enum Status 
-{
-	SUCCESS, FAIL, UNDER_FLOW, OVER_FLOW, RANGE_ERROR, DUPLICATE_ERROR,
-	NOT_PRESENT, ENTRY_INSERTED, ENTRY_FOUND, VISITED, UNVISITED
-};
 
 template <typename T>
 class CLinkList
@@ -36,16 +32,6 @@ public:
 	CLinkList(const CLinkList<T> &la);            // 复制构造函数
 	CLinkList<T> &operator =(const CLinkList<T> &la); // 重载赋值运算
 };
-
-template <class T>
-void Write(const T &e);			// 显示数据元素
-
-template <class T>
-void Write(const T &e)
-// 操作结果: 显示数据元素
-{
-	cout << e << "  ";
-}
 
 template <typename T>
 CLinkList<T>::CLinkList()   //构造空链表
