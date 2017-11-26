@@ -1,0 +1,7 @@
+
+
+本工程为数据结构练习工程，编写了各类数据结构的模板类，以头文件方式保存在工程中。
+各个类对应一套使用示例，以txt文件保存在工程的资源文件项目下，使用时直接复制到
+data_structure.cpp文件中并覆盖原内容即可。同时，该工程也保存在我的github中，该
+工程仓库名称为data_structure.链接为 https://github.com/longfei004/data_structure
+欢迎 pull request !

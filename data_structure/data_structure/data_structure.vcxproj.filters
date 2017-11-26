@@ -23,6 +23,15 @@
     <Text Include="named_rules.txt">
       <Filter>资源文件</Filter>
     </Text>
+    <Text Include="using_linklist.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="using_linkstack.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="使用说明.txt">
+      <Filter>资源文件</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="linklist.h">
@@ -35,6 +44,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Assistance.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="linkqueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

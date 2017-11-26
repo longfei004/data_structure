@@ -33,14 +33,14 @@ enum Status {
 
 char GetChar(istream &inStream = cin); // 从输入流inStream中跳过空格及制表符获取一字符
 
-template <class ElemType >
-void Swap(ElemType &e1, ElemType &e2);	// 交换e1, e2之值
+template <class T >
+void Swap(T &e1, T &e2);	// 交换e1, e2之值
 
-template<class ElemType>
-void Display(ElemType elem[], int n);	// 显示数组elem的各数据元素值
+template<class T>
+void Display(T elem[], int n);	// 显示数组elem的各数据元素值
 
-template <class ElemType>
-void Write(const ElemType &e);			// 显示数据元素
+template <class T>
+void Write(const T &e);			// 显示数据元素
 
 										// 辅助类
 class Error;			// 通用异常类
@@ -58,17 +58,17 @@ char GetChar(istream &inStream)
 	return ch;								// 返回字符
 }
 
-template <class ElemType >
-void Swap(ElemType &e1, ElemType &e2)
+template <class T >
+void Swap(T &e1, T &e2)
 // 操作结果: 交换e1, e2之值
 {
-	ElemType temp;		// 临时变量
+	T temp;		// 临时变量
 						// 循环赋值实现交换e1, e2
 	temp = e1;	e1 = e2;  e2 = temp;
 }
 
-template<class ElemType>
-void Display(ElemType elem[], int n)
+template<class T>
+void Display(T elem[], int n)
 // 操作结果: 显示数组elem的各数据元素值
 {
 	for (int i = 0; i < n; i++)
@@ -78,8 +78,8 @@ void Display(ElemType elem[], int n)
 	cout << endl;
 }
 
-template <class ElemType>
-void Write(const ElemType &e)
+template <class T>
+void Write(const T &e)
 // 操作结果: 显示数据元素
 {
 	cout << e << "  ";

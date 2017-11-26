@@ -11,7 +11,7 @@ template <typename T>
 class CLinkList
 {
 protected:
-	CNode<T> *m_head;        //头结点指针
+	CNode<T> *m_pHead;        //头结点指针
 	int m_nlenth;           // 链表长度
 
 public:
@@ -36,8 +36,8 @@ public:
 template <typename T>
 CLinkList<T>::CLinkList()   //构造空链表
 {
-	m_head = new CNode<T>;       //构造头结点
-	assert(m_head);         //构造头结点失败，终止运行
+	m_pHead = new CNode<T>;       //构造头结点
+	assert(m_pHead);         //构造头结点失败，终止运行
 	m_nlenth = 0;
 } 
 
@@ -45,13 +45,13 @@ template <typename T>
 CLinkList<T>::CLinkList(T v[], int n) //根据数组v中的元素构造链表
 {
 	CNode<T> *m_p;
-	m_p = m_head = new CNode<T>;      //构造头结点
-	assert(m_head);              //构造头结点失败，终止运行
+	m_p = m_pHead = new CNode<T>;      //构造头结点
+	assert(m_pHead);              //构造头结点失败，终止运行
 	for (int i = 0; i < n; i++)
 	{
-		m_p->m_next = new CNode<T>(v[i], nullptr);
-		assert(m_p->m_next);
-		m_p = m_p->m_next;
+		m_p->m_pNext = new CNode<T>(v[i], nullptr);
+		assert(m_p->m_pNext);
+		m_p = m_p->m_pNext;
 	}
 	m_nlenth = n;
 }
@@ -60,18 +60,18 @@ template <typename T>
 CLinkList<T>::~CLinkList()
 {
 	Clear();
-	delete m_head;
+	delete m_pHead;
 }
 
 template <typename T>
 void CLinkList<T>::Clear()                 //清除链表中的所有节点
 {
-	CNode<T> *m_p = m_head->m_next;
+	CNode<T> *m_p = m_pHead->m_pNext;
 	while (m_p != nullptr)                
 	{
-		m_head->m_next = m_p->m_next;
+		m_pHead->m_pNext = m_p->m_pNext;
 		delete m_p;
-		m_p = m_head->m_next;
+		m_p = m_pHead->m_pNext;
 	}
 	m_nlenth = 0;
 }
@@ -81,7 +81,7 @@ void CLinkList<T>::Clear()                 //清除链表中的所有节点
 template <typename T>
 bool CLinkList<T>::IsEmpty() const       // 判断链表是否为空
 {
-	return m_head->m_next == nullptr;
+	return m_pHead->m_pNext == nullptr;
 }
 
 template <class T>
@@ -95,11 +95,11 @@ template <class T>
 // 操作结果：依次对单链表的每个元素调用函数(*visit)访问
 void CLinkList<T>::Traverse(void(*Visit)(const T &)) const
 {
-	CNode<T> *p = m_head->m_next;
+	CNode<T> *p = m_pHead->m_pNext;
 	while (p != NULL) 
 	{
 		(*Visit)(p->m_data);	// 对单链表中每个元素调用函数(*visit)访问 
-		p = p->m_next;
+		p = p->m_pNext;
 	}
 }
 
@@ -107,11 +107,11 @@ template <class T>
 // 元素定位
 int CLinkList<T>::LocateElem(const T &e) const 
 {
-	CNode<T> *p = m_head->m_next;
+	CNode<T> *p = m_pHead->m_pNext;
 	int count = 1;
 	while (p != NULL && p->m_data != e) {
 		count++;
-		p = p->m_next;
+		p = p->m_pNext;
 	}
 	return  (p != NULL) ? count : 0;
 }
@@ -125,10 +125,10 @@ Status CLinkList<T>::GetElem(int i,T &e) const
 		return RANGE_ERROR;
 	else 
 	{
-		CNode<T> *p = m_head->m_next;
+		CNode<T> *p = m_pHead->m_pNext;
 		int count;
 		for (count = 1; count < i; count++)
-			p = p->m_next;	            // p指向第i个结点
+			p = p->m_pNext;	            // p指向第i个结点
 		e = p->m_data;				// 用e返回第i个元素的值
 		return ENTRY_FOUND;
 	}
@@ -144,10 +144,10 @@ Status CLinkList<T>::SetElem(int i, const T &e)
 		return RANGE_ERROR;
 	else 
 	{
-		CNode<T> *p = m_head->m_next;
+		CNode<T> *p = m_pHead->m_pNext;
 		int count;
 		for (count = 1; count < i; count++)
-			p = p->m_next;	           // 取出指向第i个结点的指针	
+			p = p->m_pNext;	           // 取出指向第i个结点的指针	
 		p->m_data = e;			   // 修改第i个元素的值为e 
 		return SUCCESS;
 	}
@@ -163,12 +163,12 @@ Status CLinkList<T>::DeleteElem(int i, T &e)
 		return RANGE_ERROR;   // i范围错		 
 	else 
 	{
-		CNode<T> *p = m_head, *q;
+		CNode<T> *p = m_pHead, *q;
 		int count;
 		for (count = 1; count < i; count++)
-			p = p->m_next;	      // p指向第i-1个结点	
-		q = p->m_next;	      // q指向第i个结点
-		p->m_next = q->m_next;	  // 删除结点
+			p = p->m_pNext;	      // p指向第i-1个结点	
+		q = p->m_pNext;	      // q指向第i个结点
+		p->m_pNext = q->m_pNext;	  // 删除结点
 		e = q->m_data;		  // 用e返回被删结点元素值	
 		m_nlenth--;			  // 删除成功后元素个数减1 
 		delete q;			  // 释放被删结点
@@ -186,13 +186,13 @@ Status CLinkList<T>::InsertElem(int i, const T &e)
 		return RANGE_ERROR;
 	else 
 	{
-		CNode<T> *p = m_head, *q;
+		CNode<T> *p = m_pHead, *q;
 		int count;
 		for (count = 1; count < i; count++)
-			p = p->m_next;	                    // p指向第i-1个结点	
-		q = new CNode<T>(e, p->m_next); // 生成新结点q
+			p = p->m_pNext;	                    // p指向第i-1个结点	
+		q = new CNode<T>(e, p->m_pNext); // 生成新结点q
 		assert(q);                          // 申请结点失败，终止程序运行 
-		p->m_next = q;				        // 将q插入到链表中
+		p->m_pNext = q;				        // 将q插入到链表中
 		m_nlenth++;							// 插入成功后，单链表长度加1 
 		return SUCCESS;
 	}
@@ -204,10 +204,10 @@ Status CLinkList<T>::InsertElem(const T &e)
 {
 	CNode<T> *p, *q;
 
-	for (p = m_head; p->m_next != nullptr; p = p->m_next);
+	for (p = m_pHead; p->m_pNext != nullptr; p = p->m_pNext);
 	q = new CNode<T>(e, nullptr);       // 生成新结点q
 	assert(q);                          // 申请结点失败，终止程序运行 
-	p->m_next = q;				        // 将q插入到链表中
+	p->m_pNext = q;				        // 将q插入到链表中
 	m_nlenth++;							// 插入成功后，单链表长度加1 
 	
 	return SUCCESS;
@@ -219,8 +219,8 @@ CLinkList<T>::CLinkList(const CLinkList<T> &la)
 {
 	int laLength = la.GetLength();	// 取被复制单链表的长度
 	T e;
-	m_head = new CNode<T>;		// 构造头指针
-	assert(m_head);                   // 构造头指针失败，终止程序运行 
+	m_pHead = new CNode<T>;		// 构造头指针
+	assert(m_pHead);                   // 构造头指针失败，终止程序运行 
 	m_nlenth = 0;						// 初始化元素个数
 
 	for (int i = 1; i <= laLength; i++) 

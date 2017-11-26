@@ -10,7 +10,7 @@ class CLinkStack
 {
 protected:
 	//  链栈的数据成员:
-	CNode<T> *m_top;							// 栈顶指针
+	CNode<T> *m_pTop;							// 栈顶指针
 
 public:
 	//  链栈的函数成员:
@@ -33,7 +33,7 @@ template<class T>
 // 操作结果：构造一个空栈表
 CLinkStack<T>::CLinkStack()
 {
-	m_top = nullptr;
+	m_pTop = nullptr;
 }
 
 template<class T>
@@ -49,7 +49,7 @@ int CLinkStack<T>::GetLength() const
 {
 	int count = 0;		// 计数器 
 	CNode<T> *p;
-	for (p = m_top; p != nullptr; p = p->m_next)		// 用p依次搜寻每个元素
+	for (p = m_pTop; p != nullptr; p = p->m_pNext)		// 用p依次搜寻每个元素
 		count++;		// 统计链栈中结点数
 	return count;
 }
@@ -58,7 +58,7 @@ template<class T>
 // 操作结果：如栈为空，则返回true，否则返回false
 bool CLinkStack<T>::IsEmpty() const
 {
-	return m_top == nullptr;
+	return m_pTop == nullptr;
 }
 
 template<class T>
@@ -66,10 +66,10 @@ template<class T>
 void CLinkStack<T>::Clear()
 {
 	CNode<T> *p;
-	while (m_top != nullptr) 
+	while (m_pTop != nullptr) 
 	{
-		p = m_top;
-		m_top = m_top->m_next;
+		p = m_pTop;
+		m_pTop = m_pTop->m_pNext;
 		delete p;
 	}
 }
@@ -79,7 +79,7 @@ template <class T>
 void CLinkStack<T>::Traverse(void(*Visit)(const T &)) const
 {
 	CNode<T> *p;
-	for (p = m_top; p != nullptr; p = p->m_next)	// 用p依次搜寻当前栈的每个元素
+	for (p = m_pTop; p != nullptr; p = p->m_pNext)	// 用p依次搜寻当前栈的每个元素
 		(*Visit)(p->m_data);		// 对p所指向的元素调用函数(*visit)访问 
 }
 
@@ -88,12 +88,12 @@ template<class T>
 //	将返回OVER_FLOW
 Status CLinkStack<T>::Push(const T e)
 {
-	CNode<T> *p = new CNode<T>(e, m_top);
+	CNode<T> *p = new CNode<T>(e, m_pTop);
 	if (p == nullptr) 	// 系统内存耗尽
 		return OVER_FLOW;
 	else 
 	{	// 操作成功
-		m_top = p;
+		m_pTop = p;
 		return SUCCESS;
 	}
 }
@@ -106,7 +106,7 @@ Status CLinkStack<T>::Top(T &e) const
 		return UNDER_FLOW;
 	else 
 	{	// 栈非空,操作成功
-		e = m_top->m_data;				// 用e返回栈顶元素
+		e = m_pTop->m_data;				// 用e返回栈顶元素
 		return SUCCESS;
 	}
 }
@@ -120,9 +120,9 @@ Status CLinkStack<T>::Pop(T &e)
 		return UNDER_FLOW;
 	else 
 	{	// 操作成功
-		CNode<T> *p = m_top;	// 保留原栈顶
-		e = m_top->m_data;				// 用e返回栈顶元素
-		m_top = m_top->m_next;			// 修改栈顶
+		CNode<T> *p = m_pTop;	// 保留原栈顶
+		e = m_pTop->m_data;				// 用e返回栈顶元素
+		m_pTop = m_pTop->m_pNext;			// 修改栈顶
 		delete p;					// 删除原栈顶结点 
 		return SUCCESS;
 	}
@@ -133,15 +133,15 @@ template<class T>
 CLinkStack<T>::CLinkStack(const CLinkStack<T> &s)
 {
 	if (s.IsEmpty())	// s为空
-		m_top = nullptr;									// 构造一空栈
+		m_pTop = nullptr;									// 构造一空栈
 	else 
 	{	                                    // s非空,复制栈
-		m_top = new CNode<T>(s.m_top->m_data);	// 生成当前栈项
-		CNode<T> *q = m_top;			        // 设置当前栈底指针
-		for (CNode<T> *p = s.m_top->m_next; p != nullptr; p = p->m_next) 
+		m_pTop = new CNode<T>(s.m_pTop->m_data);	// 生成当前栈项
+		CNode<T> *q = m_pTop;			        // 设置当前栈底指针
+		for (CNode<T> *p = s.m_pTop->m_pNext; p != nullptr; p = p->m_pNext) 
 		{
-			q->m_next = new CNode<T>(p->m_data); // 向栈底追加元素	
-			q = q->m_next;					       // 修改栈底指针 
+			q->m_pNext = new CNode<T>(p->m_data); // 向栈底追加元素	
+			q = q->m_pNext;					       // 修改栈底指针 
 		}
 	}
 }
@@ -156,12 +156,12 @@ CLinkStack<T> &CLinkStack<T>::operator = (const CLinkStack<T> &s)
 		Clear();			// 清空当前栈
 		if (!s.IsEmpty()) 
 		{	                            // s非空,复制栈
-			m_top = new CNode<T>(s.m_top->m_data);       // 生成当前栈项
-			CNode<T> *q = m_top;			            // 设置当前栈底指针
-			for (CNode<T> *p = s.m_top->m_next; p != nullptr; p = p->m_next)
+			m_pTop = new CNode<T>(s.m_pTop->m_data);       // 生成当前栈项
+			CNode<T> *q = m_pTop;			            // 设置当前栈底指针
+			for (CNode<T> *p = s.m_pTop->m_pNext; p != nullptr; p = p->m_pNext)
 			{
-				q->m_next = new CNode<T>(p->m_data);      // 向栈底追加元素	
-				q = q->m_next;			                    // 修改栈底指针
+				q->m_pNext = new CNode<T>(p->m_data);      // 向栈底追加元素	
+				q = q->m_pNext;			                    // 修改栈底指针
 			}
 		}
 	}

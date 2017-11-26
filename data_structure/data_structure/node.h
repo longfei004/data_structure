@@ -6,7 +6,7 @@ template <typename T>
 struct CNode
 {
 	T m_data;
-	CNode<T> *m_next;
+	CNode<T> *m_pNext;
 
 	CNode();
 	CNode(T e, CNode<T> *link = nullptr);
@@ -15,14 +15,14 @@ struct CNode
 template <typename T>
 CNode<T>::CNode()
 {
-	m_next = nullptr;
+	m_pNext = nullptr;
 }
 
 template <typename T>
 CNode<T>::CNode(T e, CNode<T> *link)
 {
 	m_data = e;
-	m_next = link;
+	m_pNext = link;
 }
 
 #endif

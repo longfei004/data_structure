@@ -150,10 +150,14 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="named_rules.txt" />
+    <Text Include="using_linklist.txt" />
+    <Text Include="using_linkstack.txt" />
+    <Text Include="使用说明.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assistance.h" />
     <ClInclude Include="linklist.h" />
+    <ClInclude Include="linkqueue.h" />
     <ClInclude Include="linkstack.h" />
     <ClInclude Include="node.h" />
   </ItemGroup>
