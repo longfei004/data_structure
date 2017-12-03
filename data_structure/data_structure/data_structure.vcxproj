@@ -149,6 +149,7 @@
     <ClCompile Include="data_structure.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="KMP_string.txt" />
     <Text Include="named_rules.txt" />
     <Text Include="using_linklist.txt" />
     <Text Include="using_linkstack.txt" />
