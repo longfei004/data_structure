@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+#define MAXSIZE 9
+
+void my_swap(int &a, int &b);
+
+typedef struct
+{
+	int nSortList[MAXSIZE] = { 1,2,3,5,4,9,7,6,8 };//{ 1,2,3,5,4,9,7,6,8 }{ 9, 1, 5, 8, 3, 7, 4, 6, 2 }
+	int nlength = MAXSIZE;
+}CSqList;
+
+int main(void)
+{
+	CSqList tSL;
+	int temp;
+	for (int i = 0; i < MAXSIZE; i++)
+		cout << tSL.nSortList[i] << ' ';
+	cout << endl;
+	//直接插入排序
+	//int j;//作为局部变量使用
+	for (int i = 0; i <= tSL.nlength; i++)
+	{
+		if (tSL.nSortList[i] < tSL.nSortList[i - 1])
+		{
+			//temp = tSL.nSortList[i];
+			////此时i的左侧有序
+			//for (j = i-1; j >= 0 && tSL.nSortList[j] > temp; j--)
+			//{
+			//	tSL.nSortList[j + 1] = tSL.nSortList[j];
+			//}
+			////循环停止时，对应插入位置为j+1
+			//tSL.nSortList[j + 1] = temp;
+			for (int k = i - 1; k >= 0 && tSL.nSortList[k] > tSL.nSortList[k + 1]; k--)
+				my_swap(tSL.nSortList[k], tSL.nSortList[k + 1]);
+			for (int i = 0; i < MAXSIZE; i++)
+				cout << tSL.nSortList[i] << ' ';
+			cout << endl;
+		}
+	}
+	return 0;
+}
+//交换元素
+void my_swap(int &a, int &b)
+{
+	int temp;
+	temp = a;
+	a = b;
+	b = temp;
+}

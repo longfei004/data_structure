@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+#define MAXSIZE 9
+
+void my_swap(int &a, int &b);
+
+typedef struct
+{
+	int nSortList[MAXSIZE] = { 9,1,5,8,3,7,4,6,2 };
+	int nlength = MAXSIZE;
+}CSqList;
+
+int main(void)
+{
+	CSqList tSL;
+	int min_index;
+	for (int i = 0; i < MAXSIZE; i++)
+		cout << tSL.nSortList[i] << ' ';
+	cout << endl;
+	//简单选择排序
+	for (int i = 0; i < tSL.nlength; i++)
+	{
+		min_index = i;
+		for (int j = i+1; j <= tSL.nlength; j++)
+		{
+			min_index = tSL.nSortList[j] < tSL.nSortList[min_index] ? j : min_index;
+			//三目运算符嵌套时，运算顺序从右向左
+		}
+		min_index != i ? my_swap(tSL.nSortList[i], tSL.nSortList[min_index]) : 1;
+		for (int i = 0; i < MAXSIZE; i++)
+			cout << tSL.nSortList[i] << ' ';
+		cout << endl;
+	}
+	return 0;
+}
+//交换元素
+void my_swap(int &a, int &b)
+{
+	int temp;
+	temp = a;
+	a = b;
+	b = temp;
+}

@@ -1,89 +1,42 @@
 #include <iostream>
-#include <string>
-
+#include <vector>
 using namespace std;
 
-/**********************KMP模式匹配算法**********************/
-// 常规字符串匹配采用的循环对比，当要匹配的子串和主串规模较大
-// 时，花费时间很高，效率太低。KMP模式匹配算法的思想是根据子串
-// 自身的特点，去除常规算法中注定无法匹配的对比过程，从而降低
-// 算法的时间复杂度。
-/**********************KMP模式匹配算法**********************/
 
-//计算待匹配串的next数组
-void Get_Next(string T, int *next)
+int main()
 {
-	int i, j;
-	i = 1;
-	j = 0;
-	next[0] = 0;
-	while (i < T.size())
+	int n;
+	vector<int> a;
+	cin >> n;
+	for (int i = 0; i < n; i++)
 	{
-		if (j == 0 || T[i-1] == T[j-1])  //T[i]表示后缀的单个字符
-		{                                //T[j]表示前缀的单个字符
-			i++;
-			j++;
-			if (T[i] != T[j])             //若当前字符与前缀字符不同
-				next[i - 1] = j;
-			else
-				next[i-1] = next[j-1];    //若与前缀字符相同，将前缀的next值赋
-		}                                 //给next在i位置的值
-		else
-			j = next[j-1];               //若字符不相同，则j值回溯                   
+		int temp;
+		cin >> temp;
+		a.push_back(temp);
 	}
-}
-//进行KMP模式匹配算法
-int Index_KMP(string S, string T, int pos)
-{
-	int i = pos;                          //主串下标
-	int j = 1;                            //子串下标
-	int nlength = T.size();
-	int *next = new int[nlength];         //定义动态数组
-	Get_Next(T, next);
-	while (i <= S.size() && j <= T.size())
+	bool flag = false;
+	int start;
+	for (auto it = a.begin() + 1; it != a.end(); it++)
 	{
-		if (j == 0 || S[i-1] == T[j-1])
+		if (*(it) < *(it - 1) && flag == false)
 		{
-			i++;
-			j++;
+			start = *(it - 1);
+			while (*(it) < *(it - 1))
+				it++;
+			flag = true;
 		}
-		else
+		if (start > *it)
+			flag = false;
+		if (*(it) < *(it - 1) && flag == true)
 		{
-			j = next[j-1];
+			flag = false;
+			break;
 		}
 	}
-	if (j > T.size())
-		return i - T.size();
+	if (flag == true)
+		cout << "yes" << endl;
 	else
-		return 0;
-}
-
-int main(void)
-{
-	string strHost_string, strSon_string;
-	int pos,pos_start = 1;
-	int key = 1;
-
-	cout << "Please input the host string :" << endl;
-	cin >> strHost_string;
-	while (key == 1)
-	{
-		cout << "Please input the son string :" << endl;
-		cin >> strSon_string;
-		cout << "Please input the start position :" << endl;
-		cin >> pos_start;
-
-		pos = Index_KMP(strHost_string, strSon_string, pos_start);
-		if (pos != 0)
-			cout << "The position of son string in the host string is "
-			<< pos << " after No." << pos_start << " character" << endl;
-		else
-			cout << "The host string don't have this son string !" << endl;
-		cout << "Would you want to try again ? (1/0)(y/n)" << endl;
-		cin >> key;
-	}
+		cout << "no"<< endl;
 
 	return 0;
 }
-
-

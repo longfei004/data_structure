@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+#define MAXSIZE 50
+
+typedef struct
+{
+	int nSortList[MAXSIZE] = { 0 };
+	int nlength = 0;
+}CSqList;
+
+void my_swap(int &a, int &b);
+void HeapAdd(CSqList &heap, int value);
+int HeapPOP(CSqList &heap);
+void HeapInsert(CSqList &heap, int index);
+void Heapify(CSqList &heap, int index);
+
+int main(void)
+{
+	const int list[] = { 12,9,1,10,5,8,11,3,7,4,6,2 };
+	const int list_size = sizeof(list) / sizeof(list[0]);
+	for (int i = 0; i < list_size; i++)
+		cout << list[i] << ' ';
+	cout << endl;
+	//堆排序
+	//主要实现堆结构，利用构成堆，和输出堆顶即可完成排序
+	CSqList tHeap;
+	/*用堆插入操作完成原始堆的构造*/
+	//for (int i = 0; i < list_size; i++)
+	//	HeapAdd(tHeap, list[i]);
+	/*用向上调整的方式完成原始堆的构造,无需额外空间O(1)*/
+	for (int i = 0; i < list_size; i++)
+		tHeap.nSortList[i] = list[i];
+	tHeap.nlength = list_size;
+	for (int i = 0; i < tHeap.nlength; i++)
+		HeapInsert(tHeap, i);
+	//使用删除堆顶的方式排序
+	while (tHeap.nlength > 0)
+		cout << HeapPOP(tHeap) << ' ';
+	cout << endl;
+
+	for (int i = 0; i < list_size; i++)
+		cout << tHeap.nSortList[i] << ' ';
+	cout << endl;
+
+	return 0;
+}
+//HeapAdd函数表示向一个堆中插入一个元素
+//本例程中全部为大根堆
+void HeapAdd(CSqList &heap, int value)
+{
+	heap.nSortList[heap.nlength] = value;//将新值插入到堆的最后一位
+	HeapInsert(heap, heap.nlength);
+	heap.nlength++;
+}
+//HeapPOP函数表示输出堆顶并删除
+int HeapPOP(CSqList &heap)
+{
+	my_swap(heap.nSortList[0], heap.nSortList[heap.nlength - 1]);//交换堆顶与最后一个元素
+	heap.nlength--;//删除堆顶
+	Heapify(heap, 0);//向下调整，使其重新成为堆
+
+	return heap.nSortList[heap.nlength];//返回删除的堆顶元素
+}
+//HeapInsert函数表示向上调整堆
+void HeapInsert(CSqList &heap, int index)
+{
+	int father = (index - 1) / 2;
+	while (heap.nSortList[index] > heap.nSortList[father])
+	{
+		my_swap(heap.nSortList[index], heap.nSortList[father]);
+		index = father;
+		father = (index - 1) / 2;
+	}
+}
+//Heapify函数表示向下调整堆
+void Heapify(CSqList &heap, int index)
+{
+	int left_son = 2 * index + 1;
+	while (left_son < heap.nlength)
+	{
+		int largest = (left_son + 1) < heap.nlength &&            //返回子节点大值的索引
+			heap.nSortList[left_son + 1] > heap.nSortList[left_son] ? left_son + 1 : left_son;
+		largest = heap.nSortList[largest] > heap.nSortList[index] ? largest : index;
+		if (largest == index)
+			break;
+		my_swap(heap.nSortList[largest], heap.nSortList[index]);
+		index = largest;
+		left_son = 2 * index + 1;
+	}
+}
+//交换元素
+void my_swap(int &a, int &b)
+{
+	int temp;
+	temp = a;
+	a = b;
+	b = temp;
+}

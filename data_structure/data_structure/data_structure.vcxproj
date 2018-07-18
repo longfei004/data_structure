@@ -149,11 +149,19 @@
     <ClCompile Include="data_structure.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Bubble_Sort.txt" />
+    <Text Include="Heap_Sort.txt" />
+    <Text Include="Insertion_Sort.txt" />
     <Text Include="KMP_string.txt" />
+    <Text Include="Merge_Sort.txt" />
     <Text Include="named_rules.txt" />
+    <Text Include="Quick_Sort.txt" />
+    <Text Include="Selection_Sort.txt" />
+    <Text Include="Shell_Sort.txt" />
     <Text Include="using_linklist.txt" />
     <Text Include="using_linkstack.txt" />
     <Text Include="使用说明.txt" />
+    <Text Include="股神.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assistance.h" />
